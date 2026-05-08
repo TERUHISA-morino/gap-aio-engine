@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ecfdf5"/>
+      <stop offset="0.5" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#fef3c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <text x="600" y="380" text-anchor="middle" font-family="serif" font-size="56" font-weight="700" fill="#047857">GAP-AIO Clinic</text>
+  <text x="600" y="430" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#475569">WordPress テーマ ／ 4スタイル切替対応</text>
+  <text x="600" y="500" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#94a3b8">medical-trust ／ clean-modern ／ warm-care ／ premium-dark</text>
+</svg>

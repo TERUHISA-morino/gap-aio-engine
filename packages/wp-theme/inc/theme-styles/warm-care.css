@@ -1,0 +1,8 @@
+/* warm-care ／ オレンジ + 暖色 + 親しみ系 */
+body { font-family: "Noto Sans JP", sans-serif; }
+.gap-h1, .gap-h2, .gap-h3, .gap-card-title, .gap-menu-name, .gap-voice-title { font-family: "Noto Serif JP", serif; }
+.gap-card { border-radius: 20px; }
+.gap-staff-photo { background: linear-gradient(135deg, #fed7aa, #fde68a); }
+.gap-hero-image { background: linear-gradient(135deg, #ffedd5, #fef9c3); }
+.gap-header { background: rgba(255,251,235,0.95); }
+::selection { background: rgba(194,65,12,0.2); }

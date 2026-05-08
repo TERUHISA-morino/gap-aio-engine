@@ -1,0 +1,38 @@
+/* premium-dark ／ 黒 + 金 + 高級感 */
+body { font-family: "Noto Sans JP", sans-serif; background: #0f172a; color: #e2e8f0; }
+a:hover { color: #fde68a; }
+.gap-h1, .gap-h2, .gap-h3, .gap-card-title, .gap-menu-name, .gap-voice-title { font-family: "Noto Serif JP", serif; color: #f1f5f9; }
+
+.gap-header { background: rgba(15,23,42,0.95); border-bottom-color: #334155; }
+.gap-header-logo { color: #fde68a; }
+.gap-header-nav a { color: #cbd5e1; }
+.gap-header-nav a:hover { color: #fde68a; }
+.gap-header-phone { border-color: #475569; color: #cbd5e1; }
+.gap-header-line { background: #fde68a; color: #0f172a; }
+.gap-header-line:hover { background: #fcd34d; color: #0f172a; }
+
+.gap-hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e293b 100%); }
+.gap-hero-badge { background: rgba(255,255,255,0.05); box-shadow: 0 0 0 1px #334155; color: #cbd5e1; }
+.gap-hero-image { background: linear-gradient(135deg, #1e293b, #0f172a); }
+.gap-hero-tag { background: rgba(255,255,255,0.05); box-shadow: 0 0 0 1px #334155; color: #cbd5e1; }
+
+.gap-section { background: transparent !important; }
+.gap-card, .gap-menu-card, .gap-staff-card, .gap-voice-card, .gap-access-card {
+  background: #1e293b; border-color: #334155;
+}
+.gap-card-body, .gap-voice-body, .gap-menu-meta { color: #94a3b8; }
+.gap-p-lead { color: #cbd5e1; }
+
+.gap-btn-primary { background: #fde68a; color: #0f172a; }
+.gap-btn-primary:hover { background: #fcd34d; color: #0f172a; }
+.gap-btn-outline { background: transparent; color: #fde68a; border-color: #fde68a; }
+.gap-btn-outline:hover { background: #fde68a; color: #0f172a; }
+
+.gap-final-cta { background: linear-gradient(135deg, #1e293b, #0f172a); }
+.gap-final-cta-inner h2 { color: #fde68a !important; }
+
+.gap-footer { background: #0f172a; border-top-color: #334155; color: #94a3b8; }
+.gap-footer-eyebrow { color: #fde68a; }
+.gap-footer-bottom { border-top-color: #334155; color: #64748b; }
+
+::selection { background: rgba(253,230,138,0.3); color: #0f172a; }

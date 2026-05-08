@@ -1,0 +1,6 @@
+/* clean-modern ／ 青 + ゴシック + モダン */
+body { font-family: "Noto Sans JP", sans-serif; letter-spacing: 0.01em; }
+.gap-h1, .gap-h2, .gap-h3, .gap-card-title, .gap-menu-name, .gap-voice-title { font-family: "Noto Sans JP", sans-serif; font-weight: 700; }
+.gap-header { background: rgba(255,255,255,0.92); }
+.gap-card { box-shadow: 0 2px 4px -2px rgba(2,132,199,0.05); }
+::selection { background: rgba(2,132,199,0.2); }

@@ -1,0 +1,5 @@
+/* medical-trust ／ 緑 + 明朝 + 伝統的医療系 */
+body { font-family: "Noto Sans JP", sans-serif; }
+.gap-h1, .gap-h2, .gap-h3, .gap-card-title, .gap-menu-name, .gap-voice-title { font-family: "Noto Serif JP", "游明朝", serif; }
+.gap-header { background: rgba(255,255,255,0.95); }
+::selection { background: rgba(4,120,87,0.2); }
