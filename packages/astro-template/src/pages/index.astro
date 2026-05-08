@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import clientConfig from '../client-config.js';
+import { getAllArticles } from '../lib/articles.js';
+
+const articles = getAllArticles();
+const recent = articles.slice(0, 6);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalBusiness',
+  name: clientConfig.name,
+  description: clientConfig.tagline,
+  url: clientConfig.domain,
+  ...(clientConfig.address && { address: clientConfig.address }),
+};
+---
+
+<BaseLayout title="トップ" description={clientConfig.tagline} jsonLd={jsonLd}>
+  <!-- Hero -->
+  <section class="border-b border-slate-200 bg-gradient-to-br from-emerald-50 via-white to-sky-50 py-20 md:py-28">
+    <div class="mx-auto max-w-4xl px-6">
+      <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs text-emerald-700">
+        <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+        GAP理論実践院
+      </div>
+      <h1 class="font-serif text-3xl font-bold leading-tight tracking-tight text-slate-900 md:text-5xl md:leading-tight">
+        {clientConfig.name}
+      </h1>
+      <p class="mt-6 max-w-2xl text-base leading-loose text-slate-700 md:text-lg">
+        {clientConfig.tagline}
+      </p>
+      {clientConfig.specialties && (
+        <div class="mt-8 flex flex-wrap gap-2">
+          {clientConfig.specialties.map((s) => (
+            <span class="rounded-full bg-white px-3 py-1 text-xs text-slate-600 ring-1 ring-slate-200">
+              {s}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- 最新症状解説 -->
+  <section class="py-16 md:py-20">
+    <div class="mx-auto max-w-4xl px-6">
+      <div class="mb-8 flex items-end justify-between">
+        <h2 class="font-serif text-2xl font-bold text-slate-900 md:text-3xl">最新の症状解説</h2>
+        <a href="/articles/" class="text-sm text-emerald-700 hover:underline">すべての記事 →</a>
+      </div>
+
+      {recent.length === 0 ? (
+        <p class="text-slate-500">記事を準備中です。</p>
+      ) : (
+        <div class="grid gap-5 md:grid-cols-2">
+          {recent.map((a) => (
+            <a href={`/articles/${a.slug}/`}
+               class="group block rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-emerald-300 hover:shadow-lg">
+              <div class="mb-2 text-xs text-slate-500">{a.data.date} ／ {a.data.category || '症状解説'}</div>
+              <h3 class="font-serif text-lg font-bold leading-snug text-slate-900 group-hover:text-emerald-700">
+                {a.data.title}
+              </h3>
+              {a.data.excerpt && (
+                <p class="mt-3 text-sm leading-relaxed text-slate-600 line-clamp-3">{a.data.excerpt}</p>
+              )}
+              <div class="mt-4 text-xs text-emerald-700 opacity-0 transition group-hover:opacity-100">
+                記事を読む →
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="border-t border-slate-200 bg-slate-50 py-16">
+    <div class="mx-auto max-w-3xl px-6 text-center">
+      <h2 class="font-serif text-2xl font-bold text-slate-900">GAP理論とは</h2>
+      <p class="mx-auto mt-6 max-w-2xl text-sm leading-loose text-slate-700 md:text-base">
+        重力感知点（GAP①〜④）と関節構造に着目した、物理アプローチの治療理論です。
+        筋肉のコリを揉むのではなく、身体全体の重力バランスを整えることで、根本から症状にアプローチします。
+      </p>
+    </div>
+  </section>
+</BaseLayout>

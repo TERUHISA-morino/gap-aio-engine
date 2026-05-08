@@ -1,0 +1,58 @@
+name: Daily Article Generation
+
+on:
+  schedule:
+    # 毎朝 5:00 JST = UTC 20:00 (前日)
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+    inputs:
+      client:
+        description: '特定クライアントだけ生成（空欄なら全院）'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-generativeai
+
+      - name: Generate articles
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -n "${{ inputs.client }}" ]; then
+            python packages/generator/generate.py --client "${{ inputs.client }}"
+          else
+            python packages/orchestrator/run-all.py
+          fi
+
+      - name: Commit & push
+        run: |
+          git config user.name "gap-aio-bot"
+          git config user.email "bot@gap-aio.example"
+          git add clients/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "feat: daily articles $(date +%Y-%m-%d)"
+            git push
+          fi
+
+  # Vercel側で main への push を検知して自動 deploy する想定

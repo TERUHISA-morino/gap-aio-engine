@@ -1,0 +1,13 @@
+{
+  "slug": "gap-medical-seitai",
+  "name": "GAPメディカル整体院",
+  "tagline": "GAP理論に基づく根本治療を提供する整体院。重力感知点と関節構造から、症状の本当の原因にアプローチします。",
+  "author": "GAPメディカル整体院",
+  "domain": "https://gap-aio-demo.vercel.app",
+  "address": "東京都内 ／ デモ用モデル院",
+  "contactUrl": "https://www.japan-gap-association.jp/lp/aio-lp/",
+  "specialties": ["腰痛", "肩こり", "頭痛", "四十肩", "膝痛", "自律神経"],
+  "vercel_project_id": "",
+  "monthly_articles": 30,
+  "schedule": "0 20 * * *"
+}

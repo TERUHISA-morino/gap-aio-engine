@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import clientConfig from '../../client-config.js';
+import { getAllArticles, mdToHtml } from '../../lib/articles.js';
+
+export async function getStaticPaths() {
+  const articles = getAllArticles();
+  return articles.map((a) => ({ params: { slug: a.slug }, props: { article: a } }));
+}
+
+const { article } = Astro.props;
+const html = mdToHtml(article.content);
+
+// JSON-LD: Article + 必要なら FAQPage
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalWebPage',
+  headline: article.data.title,
+  description: article.data.excerpt || '',
+  datePublished: article.data.date,
+  dateModified: article.data.date,
+  author: {
+    '@type': 'MedicalBusiness',
+    name: clientConfig.name,
+  },
+  publisher: {
+    '@type': 'MedicalBusiness',
+    name: clientConfig.name,
+    url: clientConfig.domain,
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': new URL(`/articles/${article.slug}/`, Astro.site).toString(),
+  },
+  ...(article.data.faq && Array.isArray(article.data.faq) && {
+    mainEntity: article.data.faq.map(([q, a]) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  }),
+};
+---
+
+<BaseLayout
+  title={article.data.title}
+  description={article.data.excerpt}
+  jsonLd={articleJsonLd}
+>
+  <article class="py-16 md:py-20">
+    <div class="mx-auto max-w-3xl px-6">
+      <div class="mb-6 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+        <a href="/articles/" class="hover:text-emerald-700">症状解説</a>
+        <span class="text-slate-300">／</span>
+        <span>{article.data.date}</span>
+        {article.data.category && (
+          <>
+            <span class="text-slate-300">／</span>
+            <span>{article.data.category}</span>
+          </>
+        )}
+      </div>
+
+      <h1 class="font-serif text-3xl font-bold leading-tight tracking-tight text-slate-900 md:text-4xl md:leading-tight">
+        {article.data.title}
+      </h1>
+
+      {article.data.excerpt && (
+        <p class="mt-6 rounded-xl border-l-4 border-emerald-400 bg-emerald-50 p-4 text-sm leading-relaxed text-slate-700 md:text-base">
+          {article.data.excerpt}
+        </p>
+      )}
+
+      <div class="prose-article mt-10 text-slate-800 md:text-base" set:html={html}></div>
+
+      <div class="mt-16 rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center">
+        <h3 class="font-serif text-lg font-bold text-slate-900">{clientConfig.name}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">{clientConfig.tagline}</p>
+        <a href={clientConfig.contactUrl || '#'}
+           class="mt-5 inline-flex items-center justify-center rounded-full bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700">
+          来院相談する →
+        </a>
+      </div>
+
+      <div class="mt-10 text-xs text-slate-400">
+        <a href="/articles/" class="hover:text-slate-700">← 記事一覧に戻る</a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
