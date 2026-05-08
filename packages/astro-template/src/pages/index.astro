@@ -3,8 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import clientConfig from '../client-config.js';
 import { getAllArticles } from '../lib/articles.js';
 
-const articles = getAllArticles();
-const recent = articles.slice(0, 6);
+const articles = getAllArticles().slice(0, 3);
+const t = clientConfig.theme;
+const titleFontClass = t.fontTitle === 'sans' ? 'font-sans' : 'font-serif';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -12,76 +13,297 @@ const jsonLd = {
   name: clientConfig.name,
   description: clientConfig.tagline,
   url: clientConfig.domain,
-  ...(clientConfig.address && { address: clientConfig.address }),
+  ...(clientConfig.phone && { telephone: clientConfig.phone }),
+  ...(clientConfig.addressDetail && {
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: clientConfig.addressDetail,
+    },
+  }),
+  ...(clientConfig.openHours && {
+    openingHours: clientConfig.openHours,
+  }),
 };
 ---
 
 <BaseLayout title="トップ" description={clientConfig.tagline} jsonLd={jsonLd}>
+
   <!-- Hero -->
-  <section class="border-b border-slate-200 bg-gradient-to-br from-emerald-50 via-white to-sky-50 py-20 md:py-28">
-    <div class="mx-auto max-w-4xl px-6">
-      <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs text-emerald-700">
-        <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-        GAP理論実践院
-      </div>
-      <h1 class="font-serif text-3xl font-bold leading-tight tracking-tight text-slate-900 md:text-5xl md:leading-tight">
-        {clientConfig.name}
-      </h1>
-      <p class="mt-6 max-w-2xl text-base leading-loose text-slate-700 md:text-lg">
-        {clientConfig.tagline}
-      </p>
-      {clientConfig.specialties && (
-        <div class="mt-8 flex flex-wrap gap-2">
-          {clientConfig.specialties.map((s) => (
-            <span class="rounded-full bg-white px-3 py-1 text-xs text-slate-600 ring-1 ring-slate-200">
-              {s}
-            </span>
-          ))}
+  <section class={`relative overflow-hidden bg-gradient-to-br ${t.bgGrad} py-16 md:py-24`}>
+    <div class="mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-2 md:items-center">
+      <div>
+        <div class="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs ring-1 ring-slate-200">
+          <span class="inline-block h-1.5 w-1.5 rounded-full bg-primary"></span>
+          <span class="text-primary-dark">GAP理論実践院</span>
         </div>
-      )}
+        <h1 class={`${titleFontClass} text-3xl font-bold leading-tight tracking-tight md:text-5xl md:leading-tight`}>
+          {clientConfig.tagline}
+        </h1>
+        {clientConfig.subTagline && (
+          <p class="mt-5 text-base leading-loose text-slate-700 md:text-lg">{clientConfig.subTagline}</p>
+        )}
+        <div class="mt-8 flex flex-wrap gap-3">
+          {clientConfig.lineUrl && (
+            <a href={clientConfig.lineUrl} target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-bold text-white shadow-lg hover:bg-primary-dark">
+              💬 LINEで予約する →
+            </a>
+          )}
+          {clientConfig.phone && (
+            <a href={`tel:${clientConfig.phone}`}
+               class="inline-flex items-center gap-2 rounded-full border-2 border-primary bg-white px-6 py-3 font-bold text-primary hover:bg-primary hover:text-white">
+              📞 {clientConfig.phone}
+            </a>
+          )}
+        </div>
+        {clientConfig.specialties && (
+          <div class="mt-6 flex flex-wrap gap-2">
+            {clientConfig.specialties.map((s) => (
+              <span class="rounded-full bg-white px-3 py-1 text-xs text-slate-600 ring-1 ring-slate-200">
+                {s}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div class="relative">
+        <div class="aspect-[4/3] overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-100 via-white to-amber-100 shadow-xl">
+          <div class="flex h-full items-center justify-center text-7xl">
+            🏥
+          </div>
+        </div>
+        <div class="absolute -bottom-4 -right-4 hidden rounded-2xl bg-white px-5 py-3 shadow-xl ring-1 ring-slate-200 md:block">
+          <div class="text-xs text-slate-500">国家資格保有 ／ 臨床歴20年</div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- 最新症状解説 -->
-  <section class="py-16 md:py-20">
-    <div class="mx-auto max-w-4xl px-6">
-      <div class="mb-8 flex items-end justify-between">
-        <h2 class="font-serif text-2xl font-bold text-slate-900 md:text-3xl">最新の症状解説</h2>
-        <a href="/articles/" class="text-sm text-emerald-700 hover:underline">すべての記事 →</a>
+  <!-- Features -->
+  {clientConfig.features && (
+    <section id="features" class="border-y border-slate-100 bg-slate-50 py-16 md:py-20">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class={`${titleFontClass} text-center text-2xl font-bold md:text-3xl`}>当院が選ばれる理由</h2>
+        <div class="mt-10 grid gap-5 md:grid-cols-4">
+          {clientConfig.features.map((f) => (
+            <div class="rounded-2xl bg-white p-6 text-center shadow-sm ring-1 ring-slate-100">
+              <div class="text-4xl">{f.icon}</div>
+              <h3 class={`${titleFontClass} mt-4 text-base font-bold`}>{f.title}</h3>
+              <p class="mt-3 text-xs leading-relaxed text-slate-600">{f.body}</p>
+            </div>
+          ))}
+        </div>
       </div>
+    </section>
+  )}
 
-      {recent.length === 0 ? (
-        <p class="text-slate-500">記事を準備中です。</p>
-      ) : (
-        <div class="grid gap-5 md:grid-cols-2">
-          {recent.map((a) => (
+  <!-- Policy -->
+  {clientConfig.policy && (
+    <section class="bg-white py-16 md:py-20">
+      <div class="mx-auto max-w-3xl px-6 text-center">
+        <div class="text-xs font-bold tracking-widest text-primary">施術方針</div>
+        <h2 class={`${titleFontClass} mt-3 text-2xl font-bold leading-snug md:text-3xl md:leading-tight`}>
+          {clientConfig.policy.title}
+        </h2>
+        <p class="mt-6 text-sm leading-loose text-slate-700 md:text-base">
+          {clientConfig.policy.body}
+        </p>
+      </div>
+    </section>
+  )}
+
+  <!-- Symptoms -->
+  {clientConfig.symptoms && (
+    <section id="symptoms" class="bg-slate-50 py-16 md:py-20">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class={`${titleFontClass} text-center text-2xl font-bold md:text-3xl`}>こんな症状はご相談ください</h2>
+        <p class="mt-3 text-center text-sm text-slate-500">GAP理論で根本原因にアプローチします</p>
+        <div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {clientConfig.symptoms.map((s) => (
+            <div class="rounded-2xl bg-white p-5 text-center shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-0.5 hover:shadow-md">
+              <div class="text-3xl">{s.icon}</div>
+              <div class={`${titleFontClass} mt-3 text-sm font-bold`}>{s.name}</div>
+              {s.desc && <div class="mt-1 text-[11px] text-slate-500">{s.desc}</div>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Merits -->
+  {clientConfig.merits && (
+    <section class="bg-white py-16 md:py-20">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class={`${titleFontClass} text-center text-2xl font-bold md:text-3xl`}>当院の3つの特徴</h2>
+        <div class="mt-10 grid gap-5 md:grid-cols-3">
+          {clientConfig.merits.map((m, i) => (
+            <div class="relative rounded-2xl border border-slate-200 bg-white p-7">
+              <div class="absolute -top-4 left-6 inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+                {i + 1}
+              </div>
+              <h3 class={`${titleFontClass} mt-2 text-lg font-bold`}>{m.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-slate-600">{m.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Menu / Pricing -->
+  {clientConfig.menu && (
+    <section id="menu" class="bg-slate-50 py-16 md:py-20">
+      <div class="mx-auto max-w-3xl px-6">
+        <h2 class={`${titleFontClass} text-center text-2xl font-bold md:text-3xl`}>施術メニュー・料金</h2>
+        <div class="mt-10 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+          {clientConfig.menu.map((m, i) => (
+            <div class={`flex items-center justify-between gap-4 px-6 py-5 ${i > 0 ? 'border-t border-slate-100' : ''}`}>
+              <div>
+                <div class={`${titleFontClass} text-base font-bold`}>{m.name}</div>
+                {m.duration && <div class="mt-1 text-xs text-slate-500">{m.duration}</div>}
+                {m.note && <div class="mt-1 text-xs font-bold text-primary">{m.note}</div>}
+              </div>
+              <div class={`${titleFontClass} flex-none text-xl font-bold text-primary`}>{m.price}</div>
+            </div>
+          ))}
+        </div>
+        <p class="mt-4 text-center text-xs text-slate-500">※ 表記価格は税込です。</p>
+      </div>
+    </section>
+  )}
+
+  <!-- Staff -->
+  {clientConfig.staff && clientConfig.staff.length > 0 && (
+    <section id="staff" class="bg-white py-16 md:py-20">
+      <div class="mx-auto max-w-4xl px-6">
+        <h2 class={`${titleFontClass} text-center text-2xl font-bold md:text-3xl`}>院長・スタッフ紹介</h2>
+        <div class="mt-10 space-y-8">
+          {clientConfig.staff.map((s) => (
+            <div class="grid gap-6 rounded-2xl border border-slate-200 bg-white p-6 md:grid-cols-3 md:p-8">
+              <div class="flex items-center justify-center">
+                <div class="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-emerald-100 to-amber-100 text-5xl">
+                  {s.photo ? <img src={s.photo} alt={s.name} class="h-full w-full rounded-full object-cover" /> : '👤'}
+                </div>
+              </div>
+              <div class="md:col-span-2">
+                <div class={`${titleFontClass} text-lg font-bold`}>{s.name}</div>
+                <div class="mt-1 text-xs text-primary">{s.role}</div>
+                <p class="mt-3 text-sm leading-relaxed text-slate-700">{s.bio}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Voices -->
+  {clientConfig.voices && (
+    <section id="voices" class="bg-slate-50 py-16 md:py-20">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class={`${titleFontClass} text-center text-2xl font-bold md:text-3xl`}>患者さまの声</h2>
+        <div class="mt-10 grid gap-5 md:grid-cols-3">
+          {clientConfig.voices.map((v) => (
+            <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
+              <div class="text-2xl text-primary">"</div>
+              <div class={`${titleFontClass} mt-1 text-base font-bold leading-snug`}>{v.title}</div>
+              <p class="mt-3 text-sm leading-relaxed text-slate-600">{v.body}</p>
+              <div class="mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500">{v.name}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Blog Articles (AI-generated) -->
+  {articles.length > 0 && (
+    <section class="bg-white py-16 md:py-20">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="mb-2 text-center text-xs font-bold tracking-widest text-primary">AI監修コンテンツ</div>
+        <h2 class={`${titleFontClass} text-center text-2xl font-bold md:text-3xl`}>症状別 解説記事</h2>
+        <p class="mt-3 text-center text-sm text-slate-500">GAP理論に基づき、毎日更新される深い考察</p>
+
+        <div class="mt-10 grid gap-5 md:grid-cols-3">
+          {articles.map((a) => (
             <a href={`/articles/${a.slug}/`}
-               class="group block rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-emerald-300 hover:shadow-lg">
-              <div class="mb-2 text-xs text-slate-500">{a.data.date} ／ {a.data.category || '症状解説'}</div>
-              <h3 class="font-serif text-lg font-bold leading-snug text-slate-900 group-hover:text-emerald-700">
+               class="group block rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-0.5 hover:border-primary hover:shadow-lg">
+              <div class="text-xs text-slate-500">{a.data.date} ／ {a.data.category || '症状解説'}</div>
+              <h3 class={`${titleFontClass} mt-2 text-base font-bold leading-snug group-hover:text-primary`}>
                 {a.data.title}
               </h3>
-              {a.data.excerpt && (
-                <p class="mt-3 text-sm leading-relaxed text-slate-600 line-clamp-3">{a.data.excerpt}</p>
-              )}
-              <div class="mt-4 text-xs text-emerald-700 opacity-0 transition group-hover:opacity-100">
-                記事を読む →
-              </div>
+              {a.data.excerpt && <p class="mt-3 text-xs leading-relaxed text-slate-600 line-clamp-3">{a.data.excerpt}</p>}
             </a>
           ))}
         </div>
-      )}
+        <div class="mt-8 text-center">
+          <a href="/articles/" class="inline-flex items-center gap-2 rounded-full border border-primary bg-white px-5 py-2 text-sm font-bold text-primary hover:bg-primary hover:text-white">
+            すべての症状解説記事 →
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Access -->
+  <section id="access" class="bg-slate-50 py-16 md:py-20">
+    <div class="mx-auto max-w-4xl px-6">
+      <h2 class={`${titleFontClass} text-center text-2xl font-bold md:text-3xl`}>アクセス・営業時間</h2>
+      <div class="mt-10 grid gap-6 rounded-2xl bg-white p-8 ring-1 ring-slate-200 md:grid-cols-2">
+        <div>
+          <div class="text-xs font-bold tracking-widest text-primary">所在地</div>
+          <p class="mt-2 text-base font-medium">{clientConfig.addressDetail || clientConfig.address}</p>
+          {clientConfig.stationAccess && <p class="mt-1 text-sm text-slate-600">{clientConfig.stationAccess}</p>}
+
+          <div class="mt-6 text-xs font-bold tracking-widest text-primary">営業時間</div>
+          <p class="mt-2 text-base font-medium">{clientConfig.openHours}</p>
+          <p class="mt-1 text-sm text-slate-600">{clientConfig.closedDays}</p>
+        </div>
+
+        <div>
+          <div class="text-xs font-bold tracking-widest text-primary">ご予約</div>
+          <div class="mt-3 space-y-2">
+            {clientConfig.phone && (
+              <a href={`tel:${clientConfig.phone}`} class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold hover:border-primary hover:text-primary">
+                📞 {clientConfig.phone}
+              </a>
+            )}
+            {clientConfig.lineUrl && (
+              <a href={clientConfig.lineUrl} target="_blank" rel="noopener" class="flex items-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary-dark">
+                💬 LINEで予約する →
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- About -->
-  <section class="border-t border-slate-200 bg-slate-50 py-16">
+  <!-- Final CTA -->
+  <section class="relative overflow-hidden bg-primary py-12 text-white md:py-16">
     <div class="mx-auto max-w-3xl px-6 text-center">
-      <h2 class="font-serif text-2xl font-bold text-slate-900">GAP理論とは</h2>
-      <p class="mx-auto mt-6 max-w-2xl text-sm leading-loose text-slate-700 md:text-base">
-        重力感知点（GAP①〜④）と関節構造に着目した、物理アプローチの治療理論です。
-        筋肉のコリを揉むのではなく、身体全体の重力バランスを整えることで、根本から症状にアプローチします。
+      <h2 class={`${titleFontClass} text-2xl font-bold leading-snug md:text-3xl`}>
+        痛みの根本原因に、向き合いませんか。
+      </h2>
+      <p class="mt-4 text-sm leading-loose md:text-base">
+        まずは初回カウンセリングで、あなたの症状を物理的にひも解きます。
       </p>
+      <div class="mt-7 flex flex-wrap justify-center gap-3">
+        {clientConfig.lineUrl && (
+          <a href={clientConfig.lineUrl} target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-primary shadow-lg hover:bg-amber-50">
+            💬 LINEで予約する →
+          </a>
+        )}
+        {clientConfig.phone && (
+          <a href={`tel:${clientConfig.phone}`}
+             class="inline-flex items-center gap-2 rounded-full border-2 border-white px-6 py-3 font-bold text-white hover:bg-white hover:text-primary">
+            📞 {clientConfig.phone}
+          </a>
+        )}
+      </div>
     </div>
   </section>
 </BaseLayout>
