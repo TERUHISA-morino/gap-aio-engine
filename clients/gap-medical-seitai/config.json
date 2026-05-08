@@ -5,22 +5,25 @@
   "tagline": "痛みを再発させない、根本改善を目指す整体院",
   "subTagline": "GAP理論に基づき、身体の重力バランスから整える",
   "domain": "https://gap-aio-demo.vercel.app",
-
   "phone": "03-0000-0000",
   "lineUrl": "https://lin.ee/example",
   "instagramUrl": "https://www.instagram.com/example",
   "youtubeUrl": "",
   "twitterUrl": "",
-
   "address": "東京都内 ／ デモ用モデル院",
   "addressDetail": "東京都中央区銀座1-1-1 GAP-AIOビル2F",
   "stationAccess": "東京メトロ銀座駅 徒歩3分",
   "openHours": "10:00 - 20:00",
   "closedDays": "年中無休（年末年始除く）",
   "googleMapEmbed": "",
-
-  "specialties": ["腰痛", "肩こり", "頭痛", "四十肩", "膝痛", "自律神経"],
-
+  "specialties": [
+    "腰痛",
+    "肩こり",
+    "頭痛",
+    "四十肩",
+    "膝痛",
+    "自律神経"
+  ],
   "theme": {
     "preset": "medical-trust",
     "primary": "#047857",
@@ -29,7 +32,6 @@
     "fontTitle": "serif",
     "heroStyle": "split"
   },
-
   "features": [
     {
       "icon": "🏥",
@@ -52,23 +54,52 @@
       "body": "重力感知点と関節構造から、症状の根本原因にアプローチする独自理論を実践。"
     }
   ],
-
   "policy": {
     "title": "「気持ちいい」では、根本的に治らない。",
     "body": "GAP理論では、症状の本当の原因を「重力感知点（GAP①〜④）の機能不全」と「関節構造の歪み」から読み解きます。マッサージで一時的にほぐすのではなく、身体全体の重力バランスを整えることで、痛みの再発を防ぎます。"
   },
-
   "symptoms": [
-    { "icon": "🩹", "name": "腰痛", "desc": "ぎっくり腰・慢性腰痛" },
-    { "icon": "💪", "name": "肩こり", "desc": "慢性肩こり・首こり" },
-    { "icon": "🧠", "name": "頭痛", "desc": "緊張性頭痛・偏頭痛" },
-    { "icon": "🦴", "name": "四十肩・五十肩", "desc": "肩関節周囲炎" },
-    { "icon": "🦵", "name": "膝痛", "desc": "変形性膝関節症・スポーツ障害" },
-    { "icon": "💤", "name": "自律神経の乱れ", "desc": "不眠・倦怠感" },
-    { "icon": "🤰", "name": "産後の不調", "desc": "骨盤の歪み・腰痛" },
-    { "icon": "🚶", "name": "ふらつき", "desc": "歩行時の不安定感" }
+    {
+      "icon": "🩹",
+      "name": "腰痛",
+      "desc": "ぎっくり腰・慢性腰痛"
+    },
+    {
+      "icon": "💪",
+      "name": "肩こり",
+      "desc": "慢性肩こり・首こり"
+    },
+    {
+      "icon": "🧠",
+      "name": "頭痛",
+      "desc": "緊張性頭痛・偏頭痛"
+    },
+    {
+      "icon": "🦴",
+      "name": "四十肩・五十肩",
+      "desc": "肩関節周囲炎"
+    },
+    {
+      "icon": "🦵",
+      "name": "膝痛",
+      "desc": "変形性膝関節症・スポーツ障害"
+    },
+    {
+      "icon": "💤",
+      "name": "自律神経の乱れ",
+      "desc": "不眠・倦怠感"
+    },
+    {
+      "icon": "🤰",
+      "name": "産後の不調",
+      "desc": "骨盤の歪み・腰痛"
+    },
+    {
+      "icon": "🚶",
+      "name": "ふらつき",
+      "desc": "歩行時の不安定感"
+    }
   ],
-
   "merits": [
     {
       "title": "完全担当制",
@@ -83,15 +114,38 @@
       "body": "初回は60分のカウンセリング。GAP理論に基づき、症状の根本原因を共有します。"
     }
   ],
-
   "menu": [
-    { "name": "初回カウンセリング＋整体", "duration": "60分", "price": "6,500円", "note": "初回限定 2,980円" },
-    { "name": "GAP整体（標準）", "duration": "60分", "price": "6,500円", "note": "" },
-    { "name": "GAP整体（短時間）", "duration": "30分", "price": "3,800円", "note": "" },
-    { "name": "産後骨盤矯正", "duration": "60分", "price": "7,500円", "note": "" },
-    { "name": "回数券（10回）", "duration": "", "price": "55,000円", "note": "5,500円/回相当" }
+    {
+      "name": "初回カウンセリング＋整体",
+      "duration": "60分",
+      "price": "6,500円",
+      "note": "初回限定 2,980円"
+    },
+    {
+      "name": "GAP整体（標準）",
+      "duration": "60分",
+      "price": "6,500円",
+      "note": ""
+    },
+    {
+      "name": "GAP整体（短時間）",
+      "duration": "30分",
+      "price": "3,800円",
+      "note": ""
+    },
+    {
+      "name": "産後骨盤矯正",
+      "duration": "60分",
+      "price": "7,500円",
+      "note": ""
+    },
+    {
+      "name": "回数券（10回）",
+      "duration": "",
+      "price": "55,000円",
+      "note": "5,500円/回相当"
+    }
   ],
-
   "staff": [
     {
       "name": "院長 森野",
@@ -100,7 +154,6 @@
       "photo": ""
     }
   ],
-
   "voices": [
     {
       "name": "40代 女性 ／ 慢性腰痛",
@@ -118,9 +171,9 @@
       "body": "湿布や痛み止めで誤魔化していましたが、根本治療を求めて来院。物理的なアライメント調整で、徐々に肩の可動域が戻ってきました。"
     }
   ],
-
   "vercel_project_id": "",
   "monthly_articles": 30,
   "schedule": "0 20 * * *",
-  "contactUrl": "https://www.japan-gap-association.jp/lp/aio-lp/"
+  "contactUrl": "https://www.japan-gap-association.jp/lp/aio-lp/",
+  "target": "astro"
 }

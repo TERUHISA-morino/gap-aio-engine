@@ -1,0 +1,23 @@
+{
+  "_comment": "★ WordPress連携の設定例。実際の認証情報は git に commit せず環境変数で渡すのが安全。",
+  "slug": "wp-example-clinic",
+  "name": "WP連携サンプル整骨院",
+  "shortName": "WP連携サンプル",
+  "tagline": "既存WordPressに毎日AI記事を自動投稿するサンプル設定",
+  "subTagline": "受講生が既存サイトを残したまま、GAP-AIO の記事供給だけ受けるパターン",
+  "domain": "https://existing-clinic.example.jp",
+
+  "target": "wordpress",
+
+  "wordpress": {
+    "wp_url": "https://existing-clinic.example.jp",
+    "wp_user": "your_wp_username",
+    "wp_app_pass": "xxxx xxxx xxxx xxxx xxxx xxxx",
+    "status": "draft",
+    "category_ids": []
+  },
+
+  "specialties": ["腰痛", "肩こり", "頭痛"],
+  "monthly_articles": 30,
+  "schedule": "0 20 * * *"
+}

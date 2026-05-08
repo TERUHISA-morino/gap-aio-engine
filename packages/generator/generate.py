@@ -20,6 +20,10 @@ from pathlib import Path
 import requests
 import urllib3
 
+# 同階層の wordpress_publisher を import するため sys.path 調整
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from wordpress_publisher import post_to_wordpress
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -196,6 +200,30 @@ def main() -> None:
     print(f"[OK] saved: {target.relative_to(ROOT)}", flush=True)
     print(f"     title: {parse_title(md)}", flush=True)
     print(f"     bytes: {target.stat().st_size:,}", flush=True)
+
+    # WordPress 配信（target に "wordpress" or "both" を含む場合）
+    target_modes = client.get("target", "astro")
+    if isinstance(target_modes, str):
+        target_modes = [target_modes]
+    if "wordpress" in target_modes or "both" in target_modes:
+        wp_config = client.get("wordpress") or {}
+        # 環境変数で上書き可（GH Actions secrets 用）
+        wp_config = {
+            "wp_url": wp_config.get("wp_url") or os.environ.get(f"WP_URL_{args.client.upper().replace('-','_')}"),
+            "wp_user": wp_config.get("wp_user") or os.environ.get(f"WP_USER_{args.client.upper().replace('-','_')}"),
+            "wp_app_pass": wp_config.get("wp_app_pass") or os.environ.get(f"WP_PASS_{args.client.upper().replace('-','_')}"),
+            "status": wp_config.get("status", "draft"),
+            "category_ids": wp_config.get("category_ids"),
+        }
+        if wp_config["wp_url"] and wp_config["wp_user"] and wp_config["wp_app_pass"]:
+            try:
+                result = post_to_wordpress(md, wp_config)
+                print(f"[OK] WP posted: id={result['id']} status={result['status']}", flush=True)
+                print(f"     link: {result.get('link')}", flush=True)
+            except Exception as e:
+                print(f"[WARN] WP post failed: {e}", flush=True, file=sys.stderr)
+        else:
+            print(f"[SKIP] WP credentials missing for client={args.client}", flush=True, file=sys.stderr)
 
     if not args.topic:
         for t in topics:

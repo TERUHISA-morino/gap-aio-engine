@@ -61,6 +61,13 @@ def main() -> None:
     parser.add_argument("--address", default="", help="所在地（フッターに表示）")
     parser.add_argument("--contact", default="", help="来院相談ページのURL")
     parser.add_argument("--topics", type=int, default=30, help="初期トピック数（デフォルト30）")
+    parser.add_argument("--target", choices=["astro", "wordpress", "both"], default="astro",
+                        help="配信先: astro=独立Astroサイト / wordpress=既存WPに投稿 / both=両方")
+    parser.add_argument("--theme", choices=["medical-trust", "clean-modern", "warm-care", "premium-dark"],
+                        default="medical-trust", help="Astroテーマプリセット")
+    parser.add_argument("--wp-url", default="", help="(WP target用) 既存WPサイトURL")
+    parser.add_argument("--wp-user", default="", help="(WP target用) WPユーザー名")
+    parser.add_argument("--wp-pass", default="", help="(WP target用) Application Password")
     args = parser.parse_args()
 
     target_dir = CLIENTS_DIR / args.slug
@@ -73,13 +80,41 @@ def main() -> None:
     config = {
         "slug": args.slug,
         "name": args.name,
-        "tagline": f"GAP理論に基づく根本治療を提供する{specialties[0] if specialties else '整体'}専門院。",
+        "shortName": args.name,
+        "tagline": f"GAP理論に基づく根本治療を提供する{specialties[0] if specialties else '整体'}専門院",
+        "subTagline": "重力感知点と関節構造から、症状の本当の原因にアプローチします",
         "author": args.name,
         "domain": args.domain,
         "address": args.address,
+        "addressDetail": args.address,
+        "stationAccess": "",
+        "openHours": "10:00 - 20:00",
+        "closedDays": "年中無休",
+        "phone": "",
+        "lineUrl": "",
+        "instagramUrl": "",
         "contactUrl": args.contact,
         "specialties": specialties,
-        "vercel_project_id": "",
+        "theme": {"preset": args.theme},
+        "target": args.target,
+        "wordpress": (
+            {
+                "wp_url": args.wp_url,
+                "wp_user": args.wp_user,
+                "wp_app_pass": args.wp_pass,
+                "status": "draft",
+                "category_ids": [],
+            }
+            if args.target in ("wordpress", "both")
+            else {}
+        ),
+        "features": [],
+        "policy": {"title": "", "body": ""},
+        "symptoms": [],
+        "merits": [],
+        "menu": [],
+        "staff": [],
+        "voices": [],
         "monthly_articles": 30,
         "schedule": "0 20 * * *",
     }
@@ -101,14 +136,28 @@ def main() -> None:
     (target_dir / "articles").mkdir()
 
     print(f"[OK] client created: {target_dir.relative_to(ROOT)}")
+    print(f"     theme: {args.theme}")
+    print(f"     target: {args.target}")
     print(f"     topics seeded: {len(topics)}")
     print()
     print("次のステップ:")
-    print(f"  1. Vercel で新規プロジェクト作成 → リポジトリと連携 → root: packages/astro-template")
-    print(f"  2. Vercel 環境変数: CLIENT_SLUG={args.slug}")
-    print(f"  3. ドメイン {args.domain} を Vercel プロジェクトに紐付け")
-    print(f"  4. 初回記事生成テスト:")
-    print(f"     python packages/generator/generate.py --client {args.slug}")
+    if args.target in ("astro", "both"):
+        print(f"  Astroサイト:")
+        print(f"    1. Vercel で新規プロジェクト作成（teruhisa-morinos-projects/{args.slug}）")
+        print(f"    2. CLIENT_SLUG={args.slug} を Vercel 環境変数に設定")
+        print(f"    3. ドメイン {args.domain} を Vercel プロジェクトに紐付け")
+    if args.target in ("wordpress", "both"):
+        print(f"  WordPress連携:")
+        if not args.wp_url:
+            print(f"    1. clients/{args.slug}/config.json の wordpress ブロックに wp_url/user/pass を設定")
+            print(f"       ※ または環境変数 WP_URL_{args.slug.upper().replace('-','_')} 等で渡す")
+        else:
+            print(f"    1. WP情報セット済み（{args.wp_url}）")
+        print(f"    2. テストポスト: python packages/generator/generate.py --client {args.slug}")
+    print(f"  共通:")
+    print(f"    - 初回記事生成テスト:")
+    print(f"      python packages/generator/generate.py --client {args.slug}")
+    print(f"    - 毎日5時 JST に GitHub Actions が自動生成・配信")
 
 
 if __name__ == "__main__":
